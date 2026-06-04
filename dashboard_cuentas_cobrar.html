@@ -157,6 +157,45 @@
   .btn-reclamar:hover { background: #8a0f22; }
   .btn-sin-mail { font-size: 10px; color: var(--muted); }
 
+  /* ── VISTA POR CLIENTE ─────────────────────────────── */
+  #vista-clientes { display: none; padding: 0 24px 24px; }
+  .cli-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .cli-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(13,33,87,.08); transition: .15s; }
+  .cli-card:hover { border-color: #b8c5e8; box-shadow: 0 4px 16px rgba(13,33,87,.10); }
+  .cli-head { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 14px 18px; cursor: pointer; }
+  .cli-info { display: flex; flex-direction: column; gap: 3px; }
+  .cli-nombre { font-weight: 700; font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .cli-nombre .chev { color: var(--dh-blue); transition: transform .2s; font-size: 12px; }
+  .cli-card.open .cli-nombre .chev { transform: rotate(90deg); }
+  .cli-meta { font-size: 11px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
+  .cli-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  .cli-saldo { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 15px; color: var(--dh-blue); }
+  .cli-saldo.vencido { color: var(--danger); }
+  .cli-saldo.critico { color: var(--critical); }
+  .cli-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .cli-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .cli-tag.f1 { background: #e0e7ff; color: var(--dh-blue); }
+  .cli-tag.f2 { background: #ffe4e6; color: var(--dh-red); }
+  .cli-tag.ambas { background: #f0e8ff; color: #6d28d9; }
+  .cli-body { display: none; border-top: 1px dashed var(--border); background: var(--surface2); }
+  .cli-card.open .cli-body { display: block; }
+  .cli-body table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .cli-body th { background: #e8edf6; color: var(--dh-blue); font-size: 10px; text-transform: uppercase; letter-spacing: .5px; padding: 8px 12px; text-align: left; font-weight: 700; }
+  .cli-body td { padding: 7px 12px; border-bottom: 1px solid rgba(216,221,232,.5); vertical-align: middle; }
+  .cli-body tr:last-child td { border-bottom: none; }
+  .cli-body tr:hover td { background: rgba(13,33,87,.03); }
+  .cli-body tr.pendiente td { }
+  .cli-body tr.vencida td { background: rgba(185,28,28,.04); }
+  .cli-body tr.critica td { background: rgba(127,29,29,.07); }
+  .cli-body tr.ok td { opacity: .7; }
+  .cli-controls { display: flex; gap: 10px; padding: 12px 24px 4px; flex-wrap: wrap; align-items: center; }
+  .cli-search { flex: 1; min-width: 200px; }
+  .cli-search input { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 8px; font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; outline: none; }
+  .cli-search input:focus { border-color: var(--dh-blue); }
+  .cli-sort { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: 8px; font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; outline: none; }
+  .cli-empresa-filter { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: 8px; font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; outline: none; }
+  .cli-subtotal { padding: 10px 18px; background: #e8edf6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--dh-blue); font-weight: 700; }
+
   @media (max-width: 768px) {
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
     .controls { flex-direction: column; align-items: stretch; }
@@ -173,13 +212,14 @@
       <div class="header-sub">RESUMEN DE CUENTA CLIENTES · Actualizado 19/05/2026</div>
     </div>
   </div>
-  <div class="date-badge">04 JUN 2026 . 08:37</div>
+  <div class="date-badge">04 JUN 2026 . 08:50</div>
 </div>
 
 <div class="tabs">
   <div class="tab active-f1" id="tab-ambos" onclick="setTab('ambos')">Ambas Empresas <span class="badge" id="badge-ambos">—</span></div>
   <div class="tab" id="tab-f1" onclick="setTab('f1')">F1 — Daniel Hernandez <span class="badge" id="badge-f1">—</span></div>
   <div class="tab" id="tab-f2" onclick="setTab('f2')">F2 — PRUEBA <span class="badge" id="badge-f2">—</span></div>
+  <div class="tab" id="tab-clientes" onclick="setTab('clientes')">Por Cliente <span class="badge" id="badge-clientes">—</span></div>
 </div>
 
 <div class="kpi-row" id="kpi-row"></div>
@@ -267,6 +307,23 @@
     <tbody id="tbody"></tbody>
   </table>
   <div id="no-data" class="no-data hidden">No se encontraron registros con los filtros actuales.</div>
+</div>
+
+<div id="vista-clientes">
+  <div class="cli-controls">
+    <div class="cli-search"><input type="text" id="cli-search" placeholder="🔍 Buscar cliente..." oninput="renderClientes()"></div>
+    <select class="cli-sort" id="cli-sort" onchange="renderClientes()">
+      <option value="saldo">Ordenar: Mayor saldo</option>
+      <option value="dias">Ordenar: Más antiguo</option>
+      <option value="nombre">Ordenar: Nombre A-Z</option>
+    </select>
+    <select class="cli-empresa-filter" id="cli-empresa" onchange="renderClientes()">
+      <option value="all">Ambas empresas</option>
+      <option value="F1">Solo F1</option>
+      <option value="F2">Solo F2</option>
+    </select>
+  </div>
+  <div class="cli-list" id="cli-list"></div>
 </div>
 
 <div class="pag" id="pag-bar">
@@ -581,16 +638,28 @@ function goPage(p) {
 // ─── CONTROLS ────────────────────────────────────────────────────────
 function setTab(t) {
   currentTab = t;
-  ['ambos','f1','f2'].forEach(id => {
+  ['ambos','f1','f2','clientes'].forEach(id => {
     const el = document.getElementById('tab-'+id);
+    if (!el) return;
     el.className = 'tab';
     if (id === t) {
       if (id === 'f1') el.className += ' active-f1';
       else if (id === 'f2') el.className += ' active-f2';
+      else if (id === 'clientes') el.className += ' active-f1';
       else el.className += ' active-f1';
     }
   });
-  render();
+
+  const isClientes = t === 'clientes';
+  document.getElementById('vista-clientes').style.display = isClientes ? 'block' : 'none';
+  document.querySelector('.table-wrap').style.display = isClientes ? 'none' : '';
+  document.getElementById('pag-bar').style.display = isClientes ? 'none' : '';
+  document.querySelector('.controls').style.display = isClientes ? 'none' : '';
+  document.querySelector('.legend').style.display = isClientes ? 'none' : '';
+  document.querySelector('.summary-bar').style.display = isClientes ? 'none' : '';
+
+  if (isClientes) renderClientes();
+  else render();
 }
 
 function setDir(d) {
@@ -615,6 +684,124 @@ function getZona(r) {
   if (!d || d === 'X') return 'SIN ZONA';
   // Use first meaningful street word as zone
   return d.toUpperCase();
+}
+
+function renderClientes() {
+  const q = (document.getElementById('cli-search').value || '').toLowerCase();
+  const sortBy = document.getElementById('cli-sort').value;
+  const empFilter = document.getElementById('cli-empresa').value;
+
+  // Group by client (cod + empresa combination, but merge same cod across empresas)
+  const clientMap = {};
+  allData.forEach(r => {
+    if (empFilter !== 'all' && r.empresa !== empFilter) return;
+    const key = r.cod;
+    if (!clientMap[key]) {
+      clientMap[key] = {
+        cod: r.cod, nombre: r.cliente, domicilio: r.domicilio,
+        vendedor: r.vendedor, empresas: new Set(),
+        facturas: [], totalSaldo: 0, maxDias: 0, email: r.email || ''
+      };
+    }
+    clientMap[key].empresas.add(r.empresa);
+    clientMap[key].facturas.push(r);
+    clientMap[key].totalSaldo += r.saldo;
+    clientMap[key].maxDias = Math.max(clientMap[key].maxDias, r.dias_vdo);
+    if (r.email && !clientMap[key].email) clientMap[key].email = r.email;
+  });
+
+  let clientes = Object.values(clientMap).filter(c => {
+    if (!q) return true;
+    return (c.nombre + c.cod + c.domicilio + c.vendedor).toLowerCase().includes(q);
+  });
+
+  // Sort
+  if (sortBy === 'saldo') clientes.sort((a,b) => b.totalSaldo - a.totalSaldo);
+  else if (sortBy === 'dias') clientes.sort((a,b) => b.maxDias - a.maxDias);
+  else clientes.sort((a,b) => a.nombre.localeCompare(b.nombre));
+
+  document.getElementById('badge-clientes').textContent = clientes.length;
+
+  const container = document.getElementById('cli-list');
+  if (!clientes.length) { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No se encontraron clientes</div>'; return; }
+
+  container.innerHTML = clientes.map(c => {
+    const saldoPos = c.facturas.filter(f => f.saldo > 0).reduce((s,f) => s+f.saldo, 0);
+    const saldoNeg = c.facturas.filter(f => f.saldo < 0).reduce((s,f) => s+f.saldo, 0);
+    const vencidas = c.facturas.filter(f => f.dias_vdo > 0 && f.saldo > 0);
+    const saldoClass = c.maxDias > 120 ? 'critico' : c.maxDias > 40 ? 'vencido' : '';
+    const empArray = [...c.empresas];
+    const empTag = empArray.length > 1 ? '<span class="cli-tag ambas">F1 + F2</span>'
+      : empArray[0] === 'F1' ? '<span class="cli-tag f1">F1</span>'
+      : '<span class="cli-tag f2">F2</span>';
+
+    // Build factura rows
+    const factRows = c.facturas.map(f => {
+      const rowClass = f.saldo <= 0 ? 'ok' : f.dias_vdo > 120 ? 'critica' : f.dias_vdo > 0 ? 'vencida' : 'pendiente';
+      const diasLabel = f.dias_vdo === 0 ? 'Hoy' : f.dias_vdo + ' días';
+      const diasColor = f.dias_vdo > 120 ? '#991b1b' : f.dias_vdo > 60 ? '#b91c1c' : f.dias_vdo > 30 ? '#b45309' : f.dias_vdo > 0 ? '#a16207' : '#15803d';
+
+      // Reclamar button
+      let btnRec = '';
+      if (f.dias_vdo > 40 && f.saldo > 0 && f.email) {
+        const s = encodeURIComponent('Deuda pendiente - ' + f.cliente);
+        const b = encodeURIComponent('Estimado/a ' + f.cliente + ',\n\nRegistra deuda pendiente:\nComprobante: ' + f.comprobante + '\nFecha vto: ' + f.fecha_vto + '\nDias vencidos: ' + f.dias_vdo + '\nSaldo: $' + fmt(f.saldo) + '\n\nSaludos,\nDEHACHE');
+        btnRec = '<a class="btn-reclamar" href="mailto:' + f.email + '?subject=' + s + '&body=' + b + '" style="font-size:9px;padding:3px 8px">Reclamar</a>';
+      } else if (f.dias_vdo > 40 && f.saldo > 0) {
+        btnRec = '<span class="btn-sin-mail" style="font-size:9px">Sin mail</span>';
+      }
+
+      return '<tr class="' + rowClass + '">' +
+        '<td><span class="chip chip-' + (f.empresa==='F1'?'f1':'f2') + '" style="font-size:9px;padding:1px 6px">' + f.empresa + '</span></td>' +
+        '<td style="font-family:monospace;font-size:10px">' + f.comprobante + '<br><span style="color:var(--muted);font-size:9px">' + f.tipo.trim() + '</span></td>' +
+        '<td>' + f.fecha_mov + '</td>' +
+        '<td>' + f.fecha_vto + '</td>' +
+        '<td><span style="background:' + (f.dias_vdo>120?'#7f1d1d':f.dias_vdo>60?'#fee2e2':f.dias_vdo>30?'#fef3c7':f.dias_vdo>0?'#fef9c3':'#dcfce7') + ';color:' + diasColor + ';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700">' + diasLabel + '</span></td>' +
+        '<td class="amount" style="font-size:11px">' + (f.debito > 0 ? fmt(f.debito) : '—') + '</td>' +
+        '<td class="amount ' + (f.saldo < 0 ? 'negative' : f.saldo > 1000000 ? 'large' : '') + '" style="font-size:11px">' + fmt(f.saldo) + '</td>' +
+        '<td>' + btnRec + '</td>' +
+      '</tr>';
+    }).join('');
+
+    return '<div class="cli-card" id="cli-' + c.cod + '">' +
+      '<div class="cli-head" onclick="toggleCliente('' + c.cod + '')">' +
+        '<div class="cli-info">' +
+          '<div class="cli-nombre"><span class="chev">▶</span>' + c.nombre + ' ' + empTag + '</div>' +
+          '<div class="cli-meta">' +
+            '<span>Cód. ' + c.cod + '</span>' +
+            '<span>' + c.domicilio + '</span>' +
+            '<span>' + c.vendedor + '</span>' +
+            '<span>' + c.facturas.length + ' comprobantes</span>' +
+            (vencidas.length ? '<span style="color:var(--danger)">' + vencidas.length + ' vencidos</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="cli-right">' +
+          '<div class="cli-saldo ' + saldoClass + '">$' + fmt(saldoPos) + '</div>' +
+          '<div class="cli-tags">' + empTag +
+            (c.maxDias > 0 ? '<span class="chip chip-' + ageClass(c.maxDias) + '" style="font-size:10px;padding:2px 8px">Máx ' + c.maxDias + ' días</span>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="cli-body">' +
+        '<div class="cli-subtotal">' +
+          '<span>Deuda total: <strong>$' + fmt(saldoPos) + '</strong></span>' +
+          (saldoNeg < 0 ? '<span>A favor: <strong>$' + fmt(Math.abs(saldoNeg)) + '</strong></span>' : '') +
+          '<span>Neto: <strong>$' + fmt(c.totalSaldo) + '</strong></span>' +
+        '</div>' +
+        '<table>' +
+          '<thead><tr>' +
+            '<th>Emp.</th><th>Comprobante</th><th>Fecha</th><th>Vencimiento</th><th>Días Vdo.</th><th>Débito</th><th>Saldo</th><th></th>' +
+          '</tr></thead>' +
+          '<tbody>' + factRows + '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleCliente(cod) {
+  const el = document.getElementById('cli-' + cod);
+  if (el) el.classList.toggle('open');
 }
 
 function populateSelects() {
