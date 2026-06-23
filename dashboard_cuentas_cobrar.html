@@ -601,8 +601,25 @@ function getFiltered() {
 
 function bcraButton(cuit) {
   if (!cuit) return '';
-  var url = 'https://www.bcra.gob.ar/situacion-crediticia/?id=' + cuit;
-  return '<a class="btn-bcra" href="' + url + '" target="_blank" title="Ver situacion en BCRA">&#127981; BCRA</a>';
+  // URL directa que precarga el CUIT y ejecuta la consulta automaticamente
+  var url = 'https://www.bcra.gob.ar/situacion-crediticia/?id=' + cuit + '&consultar=1';
+  return '<a class="btn-bcra" href="' + url + '" target="_blank" title="Consultar en Central de Deudores BCRA" onclick="abrirBCRA(event,\'' + cuit + '\')">&#127981; BCRA</a>';
+}
+
+function abrirBCRA(e, cuit) {
+  e.preventDefault();
+  // Primero abrimos la pagina principal, luego enviamos el formulario via JS
+  var w = window.open('', '_blank');
+  var html = '<!DOCTYPE html><html><head><title>Consultando BCRA...</title></head><body>' +
+    '<p style="font-family:sans-serif;padding:20px">Consultando Central de Deudores BCRA para CUIT ' + cuit + '...</p>' +
+    '<form id="f" method="GET" action="https://www.bcra.gob.ar/BCRAyVos/Situacion_Crediticia.asp">' +
+    '<input name="entidad" value="' + cuit + '">' +
+    '<input name="btn" value="Consultar">' +
+    '</form>' +
+    '<script>document.getElementById("f").submit();<\/script>' +
+    '</body></html>';
+  w.document.write(html);
+  w.document.close();
 }
 
 function bcraChip(r) {
