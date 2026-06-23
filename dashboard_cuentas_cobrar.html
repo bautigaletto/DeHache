@@ -599,48 +599,7 @@ function getFiltered() {
   return clientes;
 }
 
-function bcraButton(cuit) {
-  if (!cuit) return '';
-  // URL directa que precarga el CUIT y ejecuta la consulta automaticamente
-  var url = 'https://www.bcra.gob.ar/situacion-crediticia/?id=' + cuit + '&consultar=1';
-  return '<a class="btn-bcra" href="' + url + '" target="_blank" title="Consultar en Central de Deudores BCRA" onclick="abrirBCRA(event,\'' + cuit + '\')">&#127981; BCRA</a>';
-}
 
-function abrirBCRA(e, cuit) {
-  e.preventDefault();
-  // Primero abrimos la pagina principal, luego enviamos el formulario via JS
-  var w = window.open('', '_blank');
-  var html = '<!DOCTYPE html><html><head><title>Consultando BCRA...</title></head><body>' +
-    '<p style="font-family:sans-serif;padding:20px">Consultando Central de Deudores BCRA para CUIT ' + cuit + '...</p>' +
-    '<form id="f" method="GET" action="https://www.bcra.gob.ar/BCRAyVos/Situacion_Crediticia.asp">' +
-    '<input name="entidad" value="' + cuit + '">' +
-    '<input name="btn" value="Consultar">' +
-    '</form>' +
-    '<script>document.getElementById("f").submit();<\/script>' +
-    '</body></html>';
-  w.document.write(html);
-  w.document.close();
-}
-
-function bcraChip(r) {
-  var sit = r.bcra_sit || 0;
-  if (!r.cuit) return '';
-  var labels = {
-    '-1': 'Sin info BCRA',
-    '0': 'BCRA: s/d',
-    '1': 'BCRA: Normal',
-    '2': 'BCRA: Riesgo bajo',
-    '3': 'BCRA: Riesgo medio',
-    '4': 'BCRA: Riesgo alto',
-    '5': 'BCRA: Irrecuperable'
-  };
-  var cls = sit <= 0 ? 'bcra-0' : 'bcra-' + sit;
-  var dots = {'1':'🟢','-1':'⚪','0':'⚪','2':'🟡','3':'🟠','4':'🔴','5':'🔴'};
-  var dot = dots[String(sit)] || '⚪';
-  var label = labels[String(sit)] || 'BCRA: s/d';
-  var title = sit > 0 && r.bcra_ent ? 'Entidades: ' + r.bcra_ent + ' | Monto: $' + (r.bcra_monto||0).toLocaleString('es-AR') + ' | Periodo: ' + (r.bcra_periodo||'') : '';
-  return '<span class="bcra-chip ' + cls + '" title="' + title + '">' + dot + ' ' + label + '</span>';
-}
 
 function renderClientes() {
   renderKPIs();
@@ -717,8 +676,7 @@ function renderClientes() {
         '<div>' +
           '<div class="cli-nombre">' +
             '<span class="cli-chev">&#9658;</span>' +
-            c.nombre + ' ' + empChip + ' ' +
-            (c.facturas[0].cuit ? bcraButton(c.facturas[0].cuit) : '') +
+            c.nombre + ' ' + empChip +
           '</div>' +
           '<div class="cli-meta">' +
             '<span>Cod. '+c.cod+'</span>' +
