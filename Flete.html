@@ -364,7 +364,7 @@ function calcular() {
   var fact  = valor;
   var com   = chofer === 'Caceres' ? -(0.15 * fact) - (fact * comLog) : -(comC * fact) - (fact * comLog);
   var imp   = facF === 1 ? -(fact * 0.042) : 0;
-  var comb  = -(1877 * 0.40 * km);
+  var comb  = -(1915.69 * 0.40 * km);
   var otros = -(fact * 0.017);
   var amort = -(0.06 * fact);
   var gas   = comb + otros;
@@ -485,7 +485,7 @@ function openModal(idx) {
 
   var com   = e.com   !== undefined ? e.com   : -(e.comPct / 100 * e.valor) - ((e.comLog || 8) / 100 * e.valor);
   var imp   = e.imp   !== undefined ? e.imp   : (e.facF === 1 ? -(e.valor * 0.042) : 0);
-  var comb  = e.comb  !== undefined ? e.comb  : -(1877 * 0.40 * e.km);
+  var comb  = e.comb  !== undefined ? e.comb  : -(1915.69 * 0.40 * e.km);
   var otros = e.otros !== undefined ? e.otros : -(e.valor * 0.017);
   var amort = e.amort !== undefined ? e.amort : -(0.06 * e.valor);
   var viat  = e.viat  !== undefined ? e.viat  : 0;
