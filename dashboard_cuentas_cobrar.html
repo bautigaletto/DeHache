@@ -338,10 +338,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
     <div class="header-divider"></div>
     <div class="header-title">
       <h1>Dashboard · Cuentas a Cobrar</h1>
-      <p>Resumen de cuenta clientes · Actualizado <span id="fecha-act">—</span></p>
+      <p>Resumen de cuenta clientes · Actualizado <span id="fecha-act">07/08/2026 09:12</span></p>
     </div>
   </div>
-  <div class="header-badge" id="date-badge">—</div>
+  <div class="header-badge" id="date-badge">07 AGO 2026 · 09:12</div>
 </div>
 
 <div class="tabs">
@@ -430,14 +430,7 @@ F1_RECORDS.forEach(r => allData.push({...r, empresa:'F1'}));
 
 let currentTab = 'ambos';
 
-// Set date
-const now = new Date();
-const pad = n => String(n).padStart(2,'0');
-const months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
-document.getElementById('fecha-act').textContent =
-  pad(now.getDate()) + '/' + pad(now.getMonth()+1) + '/' + now.getFullYear() + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
-document.getElementById('date-badge').textContent =
-  pad(now.getDate()) + ' ' + months[now.getMonth()] + ' ' + now.getFullYear() + ' · ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+
 
 const fmt = n => n < 0
   ? '(' + Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ')'
